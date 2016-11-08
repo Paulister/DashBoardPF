@@ -7,7 +7,8 @@
 <script type="text/javascript">
 
 
-        google.charts.load('current', { 'packages': ['corechart', 'bar'] });
+    google.charts.load('current', { 'packages': ['corechart'] });
+
         google.charts.setOnLoadCallback(function () {
         var title = '@Model.Title';
         var subtitle = '@Model.Subtitle';
@@ -15,123 +16,49 @@
             @Html.Raw(Json.Encode(Model.DataTable))
         );
 
-        drawBarChart('chart', title, subtitle, dataTable);                
-        //drawColumnChart('chart', title, dataTable);
+        drawChart('chart1', title, subtitle, dataTable);                
         });
 
-        function drawBarChart(elementId, title, subtitle, dataTable) {
+        function drawChart(elementId, title, subtitle, dataTable) {
             var options = {
                 chart: {
                     title: title,
-                    subtitle: subtitle
+                    hAxis: { title: 'Dia', titleTextStyle: { color: '#333' } },
+                    vAxis: { minValue: 0 }
+
                 }
             };
-            var chart = new google.charts.Bar(document.getElementById(elementId));
+            //var chart = new google.charts.AreaChart(document.getElementById(elementId));
+            var chart = new google.visualization.AreaChart(document.getElementById(elementId));
+
             chart.draw(dataTable, options);
         }
-
-        //function drawColumnChart(elementId, title, dataTable) {
-        //    var options = {
-        //        title: title
-        //    };
-        //    var chart = new google.visualization.ColumnChart(document.getElementById(elementId));
-        //    chart.draw(dataTable, options);
-        //}
-
-
-
-        //google.charts.load('current', { 'packages': ['corechart'] });
-        //google.charts.setOnLoadCallback(drawChart2);
-
-        //function drawChart2() {
-        //    var data = google.visualization.arrayToDataTable([
-        //      ['Mes', '2014', '2015'],
-        //      ['Enero', 1000, 1100],
-        //      ['Febrero', 870, 900],
-        //      ['Marzo', 1200, 1320],
-        //      ['Abril', 1030, 1040],
-        //      ['Mayo', 1500, 1700],
-        //      ['Junio', 1070, 1100],
-        //      ['Julio', 1360, 1420],
-        //      ['Agosto', 930, 950],
-        //      ['Septiembre', 800, 850],
-        //      ['Octubre', 770, 840],
-        //      ['Noviembre', 970, 1020],
-        //      ['Diciembre', 1330, 1540]
-        //    ]);
-
-        //    var options = {
-        //        title: 'Comportamiento en el año por Sucursal',
-        //        hAxis: { title: 'Mes', titleTextStyle: { color: '#333' } },
-        //        vAxis: { title: 'Ventas en Pesos',minValue: 0 }
-        //    };
-
-        //    var chart = new google.visualization.AreaChart(document.getElementById('chart_div2'));
-        //    chart.draw(data, options);
-        //}
-
-
-        //google.charts.load("current", { packages: ["corechart"] });
-        //google.charts.setOnLoadCallback(drawChart3);
-        //function drawChart3() {
-        //    var data = google.visualization.arrayToDataTable([
-        //      ['Producto', 'Ventas'],
-        //      ['Pollo Asado', 11],
-        //      ['Medio Pollo', 5],
-        //      ['Promocion Miercoles', 7],
-        //      ['Refresco 600', 4],
-        //      ['Agua Sabor', 2],
-        //      ['Hamb Res', 3],
-        //      ['Hamb Pollo', 3],
-        //      ['Arrachera', 1],
-        //      ['Promocion Temporada', 6]
-
-        //    ]);
-
-        //    var options = {
-        //        title: 'Participacion por Producto',
-        //        is3D: true,
-        //        slices: {
-        //            0: { offset: 0.2 },
-        //            7: { offset: 0.4 },
-        //        },
-
-
-
-        //    };
-
-        //    var chart = new google.visualization.PieChart(document.getElementById('chart_div3'));
-        //    chart.draw(data, options);
-        //}
-
-
-
-
         $(window).resize(function () {
-            //drawVisualization();
-    drawBarChart();
-    //drawChart2();
-    //drawChart3();
-    });
+
+            drawChart();
+             });
 
 </script>
+
+
+
 <div class="row">
+
     <div class="col-md-12 text-center">
         <h1>Reporte de Ventas</h1>
+        <div>
+            @Html.DropDownList("Sucursales", String.Empty)
+            <button type="submit">Procesar</button>
+        </div>
     </div>
     <div class="col-md-4 col-md-offset-4">
         <hr />
     </div>
     <div class="clearfix"></div>
     <div class="col-md-6">
-        <div id="chart" class="chart"></div>
+        <div id="chart1" class="chart"></div>
     </div>
-    @*<div class="col-md-6">
-        <div id="chart_div2" class="chart"></div>
-    </div>
-    <div class="col-md-6">
-        <div id="chart_div3" class="chart"></div>
-    </div>*@
 </div>
+
 
 

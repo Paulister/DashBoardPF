@@ -80,6 +80,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -202,11 +204,39 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\DetIngresosConc.cs">
+      <DependentUpon>PolloCentral.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GoogleVisualizationDataTable.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\IngresosConc.cs">
+      <DependentUpon>PolloCentral.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Platillos.cs">
+      <DependentUpon>PolloCentral.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PolloCentral.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PolloCentral.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PolloCentral.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PolloCentral.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PolloCentral.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PolloCentral.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Sucursales.cs">
+      <DependentUpon>PolloCentral.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\VentasChartModel.cs" />
     <Compile Include="Models\VentasRestaurant.cs" />
+    <Compile Include="Models\VentaSucMesVsAnioAnterior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -217,12 +247,29 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Models\PolloCentral.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>PolloCentral.edmx</DependentUpon>
+      <LastGenOutput>PolloCentral.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\PolloCentral.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>PolloCentral.edmx</DependentUpon>
+      <LastGenOutput>PolloCentral.cs</LastGenOutput>
+    </Content>
     <Content Include="Scripts\ai.0.22.19-build00125.js" />
     <Content Include="Scripts\ai.0.22.19-build00125.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <EntityDeploy Include="Models\PolloCentral.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>PolloCentral.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\PolloCentral.edmx.diagram">
+      <DependentUpon>PolloCentral.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -236,7 +283,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -281,6 +330,9 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,0 +1,341 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="PolloCentralModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errores durante la generación:
+advertencia 6013: La tabla o vista 'PolloCentral.dbo.DetCancelacion' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
+        <EntityType Name="DetCancelacion">
+          <Property Name="IdSucursal" Type="int" />
+          <Property Name="Ticket" Type="bigint" />
+          <Property Name="IdPlatillo" Type="int" />
+          <Property Name="Cantidad" Type="float" />
+          <Property Name="Precio" Type="float" />
+          <Property Name="Gerente" Type="varchar" MaxLength="100" />
+          <Property Name="Fecha" Type="smalldatetime" />
+        </EntityType>-->
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'PolloCentral.dbo.DetIngresosConc' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="DetIngresosConc">
+          <Key>
+            <PropertyRef Name="idSucursal" />
+            <PropertyRef Name="Ticket" />
+            <PropertyRef Name="idPlatillo" />
+            <PropertyRef Name="Cantidad" />
+            <PropertyRef Name="Precio" />
+            <PropertyRef Name="Fecha" />
+          </Key>
+          <Property Name="idSucursal" Type="int" Nullable="false" />
+          <Property Name="Ticket" Type="bigint" Nullable="false" />
+          <Property Name="idPlatillo" Type="int" Nullable="false" />
+          <Property Name="Cantidad" Type="float" Nullable="false" />
+          <Property Name="Precio" Type="float" Nullable="false" />
+          <Property Name="Fecha" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'PolloCentral.dbo.IngresosConc' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="IngresosConc">
+          <Key>
+            <PropertyRef Name="idSucursal" />
+            <PropertyRef Name="Ticket" />
+            <PropertyRef Name="Fecha" />
+            <PropertyRef Name="Total" />
+            <PropertyRef Name="Tipo" />
+            <PropertyRef Name="Pago" />
+          </Key>
+          <Property Name="idSucursal" Type="int" Nullable="false" />
+          <Property Name="Ticket" Type="bigint" Nullable="false" />
+          <Property Name="Fecha" Type="smalldatetime" Nullable="false" />
+          <Property Name="Total" Type="float" Nullable="false" />
+          <Property Name="Tipo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Pago" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="idEmp" Type="varchar" MaxLength="500" />
+          <Property Name="idMesera" Type="varchar" MaxLength="500" />
+          <Property Name="Hora" Type="varchar" MaxLength="50" />
+          <Property Name="Moneda" Type="varchar" MaxLength="50" />
+          <Property Name="Valor" Type="float" />
+          <Property Name="CantDolar" Type="float" />
+          <Property Name="NoPersonas" Type="int" />
+          <Property Name="Maquina" Type="varchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="Platillos">
+          <Key>
+            <PropertyRef Name="Id_Platillo" />
+          </Key>
+          <Property Name="Id_Platillo" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Contable" Type="bit" />
+          <Property Name="Destino" Type="int" Nullable="false" />
+          <Property Name="Tipo" Type="varchar" MaxLength="200" />
+          <Property Name="TasaCero" Type="bit" />
+          <Property Name="Promocion" Type="bit" />
+          <Property Name="PromoTemp" Type="bit" />
+        </EntityType>
+        <EntityType Name="Sucursales">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Colonia" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Direccion" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Estado" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Ciudad" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="RFC" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Telefono" Type="varchar" MaxLength="20" />
+          <Property Name="Identificador" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Estatus" Type="varchar" MaxLength="50" />
+          <Property Name="IVA" Type="float" Nullable="false" />
+          <Property Name="Regimen" Type="bit" />
+          <Property Name="RegIMSS" Type="varchar" MaxLength="50" />
+          <Property Name="IdBodega" Type="int" />
+          <Property Name="DiaPromocion" Type="varchar" MaxLength="50" />
+          <Property Name="CeDis" Type="bit" />
+          <Property Name="NombreComercial" Type="varchar(max)" />
+          <Property Name="Logotipo" Type="image" />
+          <Property Name="TelCa" Type="varchar" MaxLength="50" />
+          <Property Name="Almacen" Type="bit" />
+          <Property Name="Tesoreria" Type="bit" />
+          <Property Name="SevDom" Type="bit" />
+          <Property Name="SerieFacturacion" Type="char" MaxLength="1" />
+          <Property Name="RutaFactura" Type="varchar(max)" />
+          <Property Name="CtaContpaqVenta" Type="char" MaxLength="8" />
+          <Property Name="IdentificarPolizas" Type="int" />
+        </EntityType>
+        <EntityContainer Name="PolloCentralModelStoreContainer">
+          <EntitySet Name="Platillos" EntityType="Self.Platillos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sucursales" EntityType="Self.Sucursales" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DetIngresosConc" EntityType="Self.DetIngresosConc" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [DetIngresosConc].[idSucursal] AS [idSucursal], 
+    [DetIngresosConc].[Ticket] AS [Ticket], 
+    [DetIngresosConc].[idPlatillo] AS [idPlatillo], 
+    [DetIngresosConc].[Cantidad] AS [Cantidad], 
+    [DetIngresosConc].[Precio] AS [Precio], 
+    [DetIngresosConc].[Fecha] AS [Fecha]
+    FROM [dbo].[DetIngresosConc] AS [DetIngresosConc]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="IngresosConc" EntityType="Self.IngresosConc" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [IngresosConc].[idSucursal] AS [idSucursal], 
+    [IngresosConc].[Ticket] AS [Ticket], 
+    [IngresosConc].[Fecha] AS [Fecha], 
+    [IngresosConc].[Total] AS [Total], 
+    [IngresosConc].[Tipo] AS [Tipo], 
+    [IngresosConc].[Pago] AS [Pago], 
+    [IngresosConc].[idEmp] AS [idEmp], 
+    [IngresosConc].[idMesera] AS [idMesera], 
+    [IngresosConc].[Hora] AS [Hora], 
+    [IngresosConc].[Moneda] AS [Moneda], 
+    [IngresosConc].[Valor] AS [Valor], 
+    [IngresosConc].[CantDolar] AS [CantDolar], 
+    [IngresosConc].[NoPersonas] AS [NoPersonas], 
+    [IngresosConc].[Maquina] AS [Maquina]
+    FROM [dbo].[IngresosConc] AS [IngresosConc]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PolloCentralModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Platillos">
+          <Key>
+            <PropertyRef Name="Id_Platillo" />
+          </Key>
+          <Property Name="Id_Platillo" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Contable" Type="Boolean" />
+          <Property Name="Destino" Type="Int32" Nullable="false" />
+          <Property Name="Tipo" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="TasaCero" Type="Boolean" />
+          <Property Name="Promocion" Type="Boolean" />
+          <Property Name="PromoTemp" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Sucursales">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Colonia" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Direccion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Estado" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Ciudad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RFC" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Telefono" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Identificador" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Estatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IVA" Type="Double" Nullable="false" />
+          <Property Name="Regimen" Type="Boolean" />
+          <Property Name="RegIMSS" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IdBodega" Type="Int32" />
+          <Property Name="DiaPromocion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CeDis" Type="Boolean" />
+          <Property Name="NombreComercial" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Logotipo" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="TelCa" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Almacen" Type="Boolean" />
+          <Property Name="Tesoreria" Type="Boolean" />
+          <Property Name="SevDom" Type="Boolean" />
+          <Property Name="SerieFacturacion" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="RutaFactura" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CtaContpaqVenta" Type="String" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="IdentificarPolizas" Type="Int32" />
+        </EntityType>
+        <EntityType Name="DetIngresosConc">
+          <Key>
+            <PropertyRef Name="idSucursal" />
+            <PropertyRef Name="Ticket" />
+            <PropertyRef Name="idPlatillo" />
+            <PropertyRef Name="Cantidad" />
+            <PropertyRef Name="Precio" />
+            <PropertyRef Name="Fecha" />
+          </Key>
+          <Property Name="idSucursal" Type="Int32" Nullable="false" />
+          <Property Name="Ticket" Type="Int64" Nullable="false" />
+          <Property Name="idPlatillo" Type="Int32" Nullable="false" />
+          <Property Name="Cantidad" Type="Double" Nullable="false" />
+          <Property Name="Precio" Type="Double" Nullable="false" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="IngresosConc">
+          <Key>
+            <PropertyRef Name="idSucursal" />
+            <PropertyRef Name="Ticket" />
+            <PropertyRef Name="Fecha" />
+            <PropertyRef Name="Total" />
+            <PropertyRef Name="Tipo" />
+            <PropertyRef Name="Pago" />
+          </Key>
+          <Property Name="idSucursal" Type="Int32" Nullable="false" />
+          <Property Name="Ticket" Type="Int64" Nullable="false" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Total" Type="Double" Nullable="false" />
+          <Property Name="Tipo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Pago" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="idEmp" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="idMesera" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Hora" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Moneda" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Valor" Type="Double" />
+          <Property Name="CantDolar" Type="Double" />
+          <Property Name="NoPersonas" Type="Int32" />
+          <Property Name="Maquina" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityContainer Name="PolloCentralEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Platillos" EntityType="Self.Platillos" />
+          <EntitySet Name="Sucursales" EntityType="Self.Sucursales" />
+          <EntitySet Name="DetIngresosConc" EntityType="Self.DetIngresosConc" />
+          <EntitySet Name="IngresosConc" EntityType="Self.IngresosConc" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PolloCentralModelStoreContainer" CdmEntityContainer="PolloCentralEntities1">
+          <EntitySetMapping Name="Platillos">
+            <EntityTypeMapping TypeName="PolloCentralModel.Platillos">
+              <MappingFragment StoreEntitySet="Platillos">
+                <ScalarProperty Name="Id_Platillo" ColumnName="Id_Platillo" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Contable" ColumnName="Contable" />
+                <ScalarProperty Name="Destino" ColumnName="Destino" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="TasaCero" ColumnName="TasaCero" />
+                <ScalarProperty Name="Promocion" ColumnName="Promocion" />
+                <ScalarProperty Name="PromoTemp" ColumnName="PromoTemp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sucursales">
+            <EntityTypeMapping TypeName="PolloCentralModel.Sucursales">
+              <MappingFragment StoreEntitySet="Sucursales">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Colonia" ColumnName="Colonia" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="RFC" ColumnName="RFC" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Identificador" ColumnName="Identificador" />
+                <ScalarProperty Name="Estatus" ColumnName="Estatus" />
+                <ScalarProperty Name="IVA" ColumnName="IVA" />
+                <ScalarProperty Name="Regimen" ColumnName="Regimen" />
+                <ScalarProperty Name="RegIMSS" ColumnName="RegIMSS" />
+                <ScalarProperty Name="IdBodega" ColumnName="IdBodega" />
+                <ScalarProperty Name="DiaPromocion" ColumnName="DiaPromocion" />
+                <ScalarProperty Name="CeDis" ColumnName="CeDis" />
+                <ScalarProperty Name="NombreComercial" ColumnName="NombreComercial" />
+                <ScalarProperty Name="Logotipo" ColumnName="Logotipo" />
+                <ScalarProperty Name="TelCa" ColumnName="TelCa" />
+                <ScalarProperty Name="Almacen" ColumnName="Almacen" />
+                <ScalarProperty Name="Tesoreria" ColumnName="Tesoreria" />
+                <ScalarProperty Name="SevDom" ColumnName="SevDom" />
+                <ScalarProperty Name="SerieFacturacion" ColumnName="SerieFacturacion" />
+                <ScalarProperty Name="RutaFactura" ColumnName="RutaFactura" />
+                <ScalarProperty Name="CtaContpaqVenta" ColumnName="CtaContpaqVenta" />
+                <ScalarProperty Name="IdentificarPolizas" ColumnName="IdentificarPolizas" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DetIngresosConc">
+            <EntityTypeMapping TypeName="PolloCentralModel.DetIngresosConc">
+              <MappingFragment StoreEntitySet="DetIngresosConc">
+                <ScalarProperty Name="idSucursal" ColumnName="idSucursal" />
+                <ScalarProperty Name="Ticket" ColumnName="Ticket" />
+                <ScalarProperty Name="idPlatillo" ColumnName="idPlatillo" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IngresosConc">
+            <EntityTypeMapping TypeName="PolloCentralModel.IngresosConc">
+              <MappingFragment StoreEntitySet="IngresosConc">
+                <ScalarProperty Name="idSucursal" ColumnName="idSucursal" />
+                <ScalarProperty Name="Ticket" ColumnName="Ticket" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="Pago" ColumnName="Pago" />
+                <ScalarProperty Name="idEmp" ColumnName="idEmp" />
+                <ScalarProperty Name="idMesera" ColumnName="idMesera" />
+                <ScalarProperty Name="Hora" ColumnName="Hora" />
+                <ScalarProperty Name="Moneda" ColumnName="Moneda" />
+                <ScalarProperty Name="Valor" ColumnName="Valor" />
+                <ScalarProperty Name="CantDolar" ColumnName="CantDolar" />
+                <ScalarProperty Name="NoPersonas" ColumnName="NoPersonas" />
+                <ScalarProperty Name="Maquina" ColumnName="Maquina" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

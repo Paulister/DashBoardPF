@@ -4,20 +4,27 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using DashBoardPF.Models;
+
 namespace DashBoardPF.Controllers
 {
     public class HomeController : Controller
     {
+
+        private PolloCentralEntities1 dbPF = new PolloCentralEntities1();
+
         public ActionResult Index()
         {
+
+            ViewBag.Sucursales =new SelectList(dbPF.Sucursales.Where(x=>x.CeDis==false), "ID", "Identificador");
+
             // Get the chart data from the database.  At this point it is just an array of VentasRestaurant objects.
-            var data = GetMarketSalesFromDatabase();
+            var data = VentasPorSucursalMesEnCurso();
 
             return View(new VentasChartModel()
             {
                 Title = "Total Sales By Sucursal and Anio",
                 Subtitle = "Pollo1, Pollo2, Pollo3, and Pollo4",
-                DataTable = ConstructDataTable(data)
+                DataTable = ConstructDataTableArea(data)
             });
         }
 
@@ -98,6 +105,98 @@ namespace DashBoardPF.Controllers
             };
         }
 
+
+        protected override void Dispose (bool disposing)
+        {
+            dbPF.Dispose();
+            base.Dispose(disposing);
+        }
+
+
+        private List<VentaSucMesVsAnioAnterior> VentasPorSucursalMesEnCurso()
+        {
+            List<VentaSucMesVsAnioAnterior> VentasTotalesDia = new List<VentaSucMesVsAnioAnterior>();
+            DateTime Fecha1, Fecha2, FechaAux, FechaAux1, FechaAux2, FechaAux3 ;
+
+
+
+            Fecha1 = Convert.ToDateTime("01/"+DateTime.Today.Month.ToString()+"/"+DateTime.Today.Year.ToString());
+            Fecha2 = DateTime.Today;
+       
+
+            for (DateTime i = Fecha1; i < Fecha2; i=i.AddDays(1))
+            {
+        
+                FechaAux = i.AddDays(1);
+                var VentaDiaTotal = dbPF.IngresosConc
+                    .Where(a => a.Fecha >= i && a.Fecha <= FechaAux)
+                    .Sum(b => b.Total);
+
+
+               VentasTotalesDia.Add(new VentaSucMesVsAnioAnterior{ Anio = Convert.ToInt32(DateTime.Today.Year), Dia = Convert.ToInt32(i.Day), VentasTotal = Convert.ToDecimal(VentaDiaTotal) });
+            }
+
+            int AnioAnterior = Fecha2.Year-1;
+
+            FechaAux1 = Convert.ToDateTime("01/" + DateTime.Today.Month.ToString() + "/" + AnioAnterior.ToString());
+            FechaAux2 = Convert.ToDateTime(DateTime.Today.Day.ToString() + "/" + DateTime.Today.Month.ToString() + "/" + AnioAnterior.ToString());
+
+
+            for (DateTime i = FechaAux1; i < FechaAux2; i = i.AddDays(1))
+            {
+
+                FechaAux3 = i.AddDays(1);
+                var VentaDiaTotal = dbPF.IngresosConc
+                    .Where(a => a.Fecha >= i && a.Fecha <= FechaAux3)
+                    .Sum(b => b.Total);
+
+
+                VentasTotalesDia.Add(new VentaSucMesVsAnioAnterior { Anio = Convert.ToInt32(FechaAux1.Year), Dia = Convert.ToInt32(i.Day), VentasTotal = Convert.ToDecimal(VentaDiaTotal) });
+            }
+
+
+
+
+
+
+            return VentasTotalesDia;
+
+        }
+
+
+        private GoogleVisualizationDataTable ConstructDataTableArea(List<VentaSucMesVsAnioAnterior> data)
+        {
+            var dataTable = new GoogleVisualizationDataTable();
+
+            // Obtiene los dias del mes a mostrar
+            var anios= data.Select(x => x.Anio).Distinct().OrderBy(x => x);
+
+            // Obtiene los Años a mostrar
+            var dias = data.Select(x => x.Dia).Distinct().OrderBy(x => x);
+
+            // Define Columna y Tipo de variable
+            dataTable.AddColumn("Año", "number");
+            foreach (var anio in anios)
+            {
+                dataTable.AddColumn(anio.ToString(), "number");
+            }
+
+            foreach (var dia in dias)
+            {
+                var values = new List<object>(new[] { dia.ToString() });
+                foreach (var anio in anios)
+                {
+                    var ventat = data
+                        .Where(x => x.Anio == anio && x.Dia == dia)
+                        .Select(x => x.VentasTotal)
+                        .SingleOrDefault();
+                    values.Add(ventat);
+                }
+                dataTable.AddRow(values);
+            }
+
+            return dataTable;
+        }
 
 
     }
