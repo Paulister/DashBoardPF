@@ -11,6 +11,8 @@ namespace DashBoardPF.Models
         public string Title { get; set; }
         public string Subtitle { get; set; }
         public GoogleVisualizationDataTable DataTable { get; set; }
+        public GoogleVisualizationDataTable DataTable2 { get; set; }
+
 
     }
 }

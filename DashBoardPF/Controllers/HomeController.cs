@@ -15,16 +15,17 @@ namespace DashBoardPF.Controllers
         public ActionResult Index()
         {
 
-            ViewBag.Sucursales =new SelectList(dbPF.Sucursales.Where(x=>x.CeDis==false), "ID", "Identificador");
 
             // Get the chart data from the database.  At this point it is just an array of VentasRestaurant objects.
             var data = VentasPorSucursalMesEnCurso();
+            var data2 = VentasPorSucursalAño();
 
             return View(new VentasChartModel()
             {
                 Title = "Total Sales By Sucursal and Anio",
                 Subtitle = "Pollo1, Pollo2, Pollo3, and Pollo4",
-                DataTable = ConstructDataTableArea(data)
+                DataTable = ConstructDataTableArea(data),
+                DataTable2= ConstructDataTableArea2(data2)
             });
         }
 
@@ -91,17 +92,6 @@ namespace DashBoardPF.Controllers
                 new VentasRestaurant() { Sucursal = "Pollo1", Anio = 2014, VentasTotales = 898132 },
                 new VentasRestaurant() { Sucursal = "Pollo1", Anio = 2015, VentasTotales = 941823 },
 
-                new VentasRestaurant() { Sucursal = "Pollo3", Anio = 2013, VentasTotales = 509132 },
-                new VentasRestaurant() { Sucursal = "Pollo3", Anio = 2014, VentasTotales = 570913 },
-                new VentasRestaurant() { Sucursal = "Pollo3", Anio = 2015, VentasTotales = 460923 },
-
-                new VentasRestaurant() { Sucursal = "Pollo2", Anio = 2013, VentasTotales = 753939 },
-                new VentasRestaurant() { Sucursal = "Pollo2", Anio = 2014, VentasTotales = 830923 },
-                new VentasRestaurant() { Sucursal = "Pollo2", Anio = 2015, VentasTotales = 910302 },
-
-                new VentasRestaurant() { Sucursal = "Pollo4", Anio = 2013, VentasTotales = 109012 },
-                new VentasRestaurant() { Sucursal = "Pollo4", Anio = 2014, VentasTotales = 400302 },
-                new VentasRestaurant() { Sucursal = "Pollo4", Anio = 2015, VentasTotales = 492901 }
             };
         }
 
@@ -120,20 +110,23 @@ namespace DashBoardPF.Controllers
 
 
 
-            Fecha1 = Convert.ToDateTime("01/"+DateTime.Today.Month.ToString()+"/"+DateTime.Today.Year.ToString());
+            
+            Fecha1 = Convert.ToDateTime("01/" + DateTime.Today.Month.ToString() + "/" + DateTime.Today.Year.ToString());
             Fecha2 = DateTime.Today;
-       
 
-            for (DateTime i = Fecha1; i < Fecha2; i=i.AddDays(1))
+
+            for (DateTime i = Fecha1; i < Fecha2; i = i.AddDays(1))
             {
-        
+
                 FechaAux = i.AddDays(1);
                 var VentaDiaTotal = dbPF.IngresosConc
                     .Where(a => a.Fecha >= i && a.Fecha <= FechaAux)
                     .Sum(b => b.Total);
 
 
-               VentasTotalesDia.Add(new VentaSucMesVsAnioAnterior{ Anio = Convert.ToInt32(DateTime.Today.Year), Dia = Convert.ToInt32(i.Day), VentasTotal = Convert.ToDecimal(VentaDiaTotal) });
+               VentasTotalesDia.Add(new VentaSucMesVsAnioAnterior{ Anio = Convert.ToInt32(DateTime.Today.Year),
+                                                                   Dia = Convert.ToInt32(i.Day),
+                                                                   VentasTotal = Convert.ToDecimal(VentaDiaTotal) });
             }
 
             int AnioAnterior = Fecha2.Year-1;
@@ -150,15 +143,10 @@ namespace DashBoardPF.Controllers
                     .Where(a => a.Fecha >= i && a.Fecha <= FechaAux3)
                     .Sum(b => b.Total);
 
-
-                VentasTotalesDia.Add(new VentaSucMesVsAnioAnterior { Anio = Convert.ToInt32(FechaAux1.Year), Dia = Convert.ToInt32(i.Day), VentasTotal = Convert.ToDecimal(VentaDiaTotal) });
+                VentasTotalesDia.Add(new VentaSucMesVsAnioAnterior { Anio = Convert.ToInt32(FechaAux1.Year),
+                                                                     Dia = Convert.ToInt32(i.Day),
+                                                                     VentasTotal = Convert.ToDecimal(VentaDiaTotal) });
             }
-
-
-
-
-
-
             return VentasTotalesDia;
 
         }
@@ -168,10 +156,10 @@ namespace DashBoardPF.Controllers
         {
             var dataTable = new GoogleVisualizationDataTable();
 
-            // Obtiene los dias del mes a mostrar
+           
             var anios= data.Select(x => x.Anio).Distinct().OrderBy(x => x);
 
-            // Obtiene los Años a mostrar
+            // Obtiene los dias del mes a mostrar
             var dias = data.Select(x => x.Dia).Distinct().OrderBy(x => x);
 
             // Define Columna y Tipo de variable
@@ -198,6 +186,97 @@ namespace DashBoardPF.Controllers
             return dataTable;
         }
 
+        private GoogleVisualizationDataTable ConstructDataTableArea2(List<VentasSucAnioVsAnioAnterior> data)
+        {
+            var dataTable = new GoogleVisualizationDataTable();
 
-    }
+
+            var anios = data.Select(x => x.Anio).Distinct().OrderBy(x => x);
+
+            // Obtiene los dias del mes a mostrar
+            var meses = data.Select(x => x.Mes).Distinct().OrderBy(x => x);
+
+            // Define Columna y Tipo de variable
+            dataTable.AddColumn("Año", "number");
+            foreach (var anio in anios)
+            {
+                dataTable.AddColumn(anio.ToString(), "number");
+            }
+
+            foreach (var mes in meses)
+            {
+                var values = new List<object>(new[] { mes.ToString() });
+                foreach (var anio in anios)
+                {
+                    var ventat = data
+                        .Where(x => x.Anio == anio && x.Mes == mes)
+                        .Select(x => x.VentasTotal)
+                        .SingleOrDefault();
+                    values.Add(ventat);
+                }
+                dataTable.AddRow(values);
+            }
+
+            return dataTable;
+        }
+
+        //Venta Por Mes de Año Vigente contra Año Anterior
+
+        private List<VentasSucAnioVsAnioAnterior> VentasPorSucursalAño()
+        {
+            List<VentasSucAnioVsAnioAnterior> VentasTotalesDia = new List<VentasSucAnioVsAnioAnterior>();
+            DateTime Fecha1, Fecha2, FechaAux, FechaAux1, FechaAux2, FechaAux3;
+
+
+
+            Fecha1 = Convert.ToDateTime("01/01/" + DateTime.Today.Year.ToString());
+            Fecha2 = DateTime.Today;
+
+            for (DateTime i = Fecha1; i < Fecha2; i = i.AddMonths(1))
+            {
+
+                
+                FechaAux = new DateTime(i.Year, i.Month + 1, 1).AddDays(-1);
+                var VentaDiaTotal = dbPF.IngresosConc
+                    .Where(a => a.Fecha >= i && a.Fecha <= FechaAux)
+                    .Sum(b => b.Total);
+
+                VentasTotalesDia.Add(new VentasSucAnioVsAnioAnterior { Anio = Convert.ToInt32(DateTime.Today.Year),
+                                                                       Mes = Convert.ToInt32(i.Month),
+                                                                       VentasTotal = Convert.ToDecimal(VentaDiaTotal) });
+            }
+
+            int AnioAnterior = Fecha2.Year - 1;
+
+
+        FechaAux1 = Convert.ToDateTime("01/01/" + AnioAnterior.ToString());
+        FechaAux2 = Convert.ToDateTime(DateTime.Today.Day.ToString() + "/" + DateTime.Today.Month.ToString() + "/" + AnioAnterior.ToString());
+
+
+        for (DateTime i = FechaAux1; i < FechaAux2; i = i.AddMonths(1))
+        {
+
+            FechaAux3 = new DateTime(i.Year, i.Month + 1, 1).AddDays(-1);
+
+           
+                var VentaDiaTotal = dbPF.IngresosConc
+                    .Where(a => a.Fecha >= i && a.Fecha <= FechaAux3)
+                    .Sum(b => b.Total);
+
+                VentasTotalesDia.Add(new VentasSucAnioVsAnioAnterior { Anio = Convert.ToInt32(FechaAux1.Year),
+                                                                       Mes = Convert.ToInt32(i.Month),
+                                                                       VentasTotal = Convert.ToDecimal(VentaDiaTotal) });
+            }
+            return VentasTotalesDia;
+        }
+
+
+        public ActionResult ReportePorSucursal()
+        {
+            ViewBag.Sucursales = new SelectList(dbPF.Sucursales.Where(x => x.CeDis == false), "ID", "Identificador");
+
+            return View();
+        }
+
+     }
 }

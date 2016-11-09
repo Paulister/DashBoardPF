@@ -7,8 +7,7 @@
 <script type="text/javascript">
 
 
-    google.charts.load('current', { 'packages': ['corechart'] });
-
+        google.charts.load('current', { 'packages': ['corechart'] });
         google.charts.setOnLoadCallback(function () {
         var title = '@Model.Title';
         var subtitle = '@Model.Subtitle';
@@ -28,14 +27,43 @@
 
                 }
             };
-            //var chart = new google.charts.AreaChart(document.getElementById(elementId));
+
             var chart = new google.visualization.AreaChart(document.getElementById(elementId));
 
             chart.draw(dataTable, options);
         }
+
+
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(function () {
+            var title = '@Model.Title';
+            var subtitle = '@Model.Subtitle';
+            var dataTable = new google.visualization.DataTable(
+                @Html.Raw(Json.Encode(Model.DataTable2))
+            );
+
+            drawChart2('chart2', title, subtitle, dataTable);                
+        });
+
+        function drawChart2(elementId, title, subtitle, dataTable) {
+            var options = {
+                chart: {
+                    title: title,
+                    hAxis: { title: 'Mes', titleTextStyle: { color: '#333' } },
+                    vAxis: { minValue: 0 }
+
+                }
+            };
+
+            var chart = new google.visualization.AreaChart(document.getElementById(elementId));
+
+            chart.draw(dataTable, options);
+        }
+
         $(window).resize(function () {
 
             drawChart();
+            drawChart2();
              });
 
 </script>
@@ -45,11 +73,7 @@
 <div class="row">
 
     <div class="col-md-12 text-center">
-        <h1>Reporte de Ventas</h1>
-        <div>
-            @Html.DropDownList("Sucursales", String.Empty)
-            <button type="submit">Procesar</button>
-        </div>
+        <h1>Tendencia Acumulada  Mes en Curso Dia a Dia</h1>
     </div>
     <div class="col-md-4 col-md-offset-4">
         <hr />
@@ -59,6 +83,20 @@
         <div id="chart1" class="chart"></div>
     </div>
 </div>
+<div class="row">
+
+    <div class="col-md-12 text-center">
+        <h1>Tendencia Acumulada por Año</h1>
+    </div>
+    <div class="col-md-4 col-md-offset-4">
+        <hr />
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-md-6">
+        <div id="chart2" class="chart"></div>
+    </div>
+</div>
+
 
 
 
